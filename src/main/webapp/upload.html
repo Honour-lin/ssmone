@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>主页</title>
+    <link rel="stylesheet" href="plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="plugins/angularjs/pagination.css"/>
+    <script src="plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <script src="plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script src="plugins/angularjs/angular.min.js"></script>
+    <script src="plugins/angularjs/pagination.js"></script>
+    <script src="js/base_pagination.js"></script>
+    <script src="js/service/itemService.js"></script>
+    <script src="js/controller/baseController.js"></script>
+    <script src="js/controller/itemController.js"></script>
+    <style>
+        #uploadImg{
+            font-size:16px;
+            overflow:hidden;
+            position:absolute
+        }
+        #file{
+            position:absolute;
+            z-index:100;
+            margin-left:-180px;
+            font-size:60px;
+            opacity:0;
+            filter:alpha(opacity=0); margin-top:-5px;
+        }
+    </style>
+
+</head>
+<body>
+
+<div>
+    <span id="uploadImg">
+       <input type="file" id="file" size="1" onclick="importExcel()">
+       <a href="javascript:void(0)" class="coolbg">导入Excel</a>
+    </span>
+</div>
+<script>
+    function importExcel() {
+        //设置循环器，检查是否选中上传文件，选中则发送ajax请求
+        var result = setInterval(function () {
+            var file = $("#file")[0].files[0];
+            if (file != undefined) {
+                clearInterval(result);//停止循环
+                //创建表单对象存储上传的文件
+                var formdata = new FormData();
+                formdata.append("file", file);
+                $.ajax({
+                    type: 'post',
+                    url: 'http://localhost:8080/import/depart',
+                    data: formdata,
+                    contentType: false,//防止jquery修改文件类型
+                    processData: false,//防止jQuery对文件内容进行修改
+                    success: function (msg) {
+                        if (msg == "OK") {
+                            alert("导入成功！");
+                        } else {
+                            alert("导入失败！");
+                        }
+                    }
+                })
+            }
+        }, 1000)
+    }
+</script>
+</body>
+</html>

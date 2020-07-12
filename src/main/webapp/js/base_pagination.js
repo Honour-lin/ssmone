@@ -1,0 +1,1 @@
+var app = angular.module("ssmone",['pagination']);//第一个参数是模块名，第二个参数是依赖
